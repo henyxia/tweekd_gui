@@ -44,6 +44,51 @@ main () {
 	printf("?\n");
 	pmap = XCreatePixmap(dis, win, width, height, DefaultDepth(dis, DefaultScreen(dis)));
 
+
+	FILE* home = NULL;
+	char buffer[4];
+	home = fopen("home.bmp", "r");
+	if(home == NULL)
+		return 0;
+
+	fseek(home, 0x0A, SEEK_SET);
+	buffer[0] = getc(home);
+	buffer[1] = getc(home);
+	buffer[2] = getc(home);
+	buffer[3] = getc(home);
+	printf("Pixel array offset %02x %02x %02x %02x\n", buffer[0], buffer[1], buffer[2], buffer[3]);
+
+	fseek(home, 0x12, SEEK_SET);
+        buffer[0] = getc(home);
+        buffer[1] = getc(home);
+        buffer[2] = getc(home);
+        buffer[3] = getc(home);
+        printf("Width %02x %02x %02x %02x\n", buffer[0], buffer[1], buffer[2], buffer[3]);
+
+	//fseek(home, 0x12, SEEK_SET);
+        buffer[0] = getc(home);
+        buffer[1] = getc(home);
+        buffer[2] = getc(home);
+        buffer[3] = getc(home);
+        printf("Height %02x %02x %02x %02x\n", buffer[0], buffer[1], buffer[2], buffer[3]);
+
+	fseek(home, 0x1C, SEEK_SET);
+        buffer[0] = getc(home);
+        buffer[1] = getc(home);
+        printf("Bits Per Pixel %02x %02x\n", buffer[0], buffer[1]);
+
+	if(buffer[1] != 0 || buffer[0] != 0x18)
+	{
+		printf("Could not read BMP\n");
+		return 1;
+	}
+
+
+
+
+	while(1);
+
+
 	/* look for events forever... */
 	while(1) {		
 		/* get the next event and stuff it into our event variable.
