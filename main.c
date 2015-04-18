@@ -178,6 +178,21 @@ int main(int argc, char* argv[])
 
 		if(XAllocColor(display, screen_colormap, &col) == 0)
 			printf("Failed to allocate color\n");
+		buffer[0] = getc(home);
+		buffer[1] = getc(home);
+		buffer[2] = getc(home);
+		printf("Alloc X %03d Y %03d R %02x G %02x B %02x\n", i%width, i/width, buffer[0], buffer[1], buffer[2]);
+	}
+
+
+	fseek(home, initOffsetBMP, SEEK_SET);
+	
+	for(i=0; i<76800; i++)
+	{
+		col.red = buffer[2] * 257;
+		col.green = buffer[1] * 257;
+		col.blue = buffer[0] * 257;
+
 		if(XSetForeground(display, gc, col.pixel) == 0)
 			printf("Failed to set foreground\n");
 		if(XDrawPoint(display,win,gc,i%width,height-1-(i/width)) == 0)
@@ -185,10 +200,8 @@ int main(int argc, char* argv[])
 		buffer[0] = getc(home);
 		buffer[1] = getc(home);
 		buffer[2] = getc(home);
-		//printf("X %03d Y %03d R %02x G %02x B %02x\n", i%width, i/width, buffer[0], buffer[1], buffer[2]);
+		printf("Disp X %03d Y %03d R %02x G %02x B %02x\n", i%width, i/width, buffer[0], buffer[1], buffer[2]);
 	}
-
-
 
 
 
