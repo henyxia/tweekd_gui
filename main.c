@@ -1,15 +1,18 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <unistd.h>
 #include <libusb-1.0/libusb.h>
 
-#define VENDOR_ID	0xfccf
-#define PRODUCT_ID	0xa001
+#define VENDOR_ID		0xfccf
+#define PRODUCT_ID		0xa001
+#define ENDPOINT_OUT	0x01
+#define	MAX_SIZE_OUT	64
+
+libusb_device_handle* screenHandle;
 
 bool initUI(void)
 {
 	int				ret;
-
-	libusb_device_handle* screenHandle;
 
 	ret = libusb_init(NULL);
 	if(ret != 0)
@@ -96,8 +99,23 @@ bool initUI(void)
 
 int main(void)
 {
+	int transfered;
+
 	if(!initUI())
+	{
 		printf("Unable to initialize the UI\n");
+		return 1;
+	}
+
+	printf("Screen Initialized\n");
+
+	sleep(2);
+
+	printf("Sending command\n");
+
+	//libusb_bulk_transfer(screenHandle, ENDPOINT_OUT, data, MAX_SIZE_OUT, &transfered, 0);
+	unsigned char data[] = {0x81, 0x07, 0xFF};
+	libusb_bulk_transfer(screenHandle, ENDPOINT_OUT, data, 3, &transfered, 0);
 
 	return 0;
 }
