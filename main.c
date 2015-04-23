@@ -114,36 +114,8 @@ int main(void)
 	printf("Sending GREEN command\n");
 
 	//libusb_bulk_transfer(screenHandle, ENDPOINT_OUT, data, MAX_SIZE_OUT, &transfered, 0);
-	unsigned char odata[] = {0x81, 0xF8, 0x1F};
+	unsigned char odata[] = {0x81, 0x0E, 0x40};
 	libusb_bulk_transfer(screenHandle, ENDPOINT_OUT, odata, 3, &transfered, 0);
 
-	sleep(2);
-
-	printf("Sending BLUE command\n");
-
-	odata[0] = 0x81;
-	odata[1] = 0x07;
-	odata[2] = 0xFF;
-	libusb_bulk_transfer(screenHandle, ENDPOINT_OUT, odata, 3, &transfered, 0);
-
-	sleep(2);
-
-	printf("Sending PIXEL command\n");
-
-	unsigned char data[] = {0x82, 0x0A, 0x00, 0x0A, 0x00, 0x02, 0x00, 0x02, 0x00, 0x01, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55};
-
-	libusb_bulk_transfer(screenHandle, ENDPOINT_OUT, data, 18, &transfered, 0);
-/*
-	data[0] = 0x02;
-	data[1] = 0x00;
-	data[2] = 0x00;
-	data[3] = 0x1F;
-	data[4] = 0x00;
-	data[5] = 0x00;
-	data[6] = 0x00;
-	data[7] = 0x00;
-
-	libusb_bulk_transfer(screenHandle, ENDPOINT_OUT, data, 3, &transfered, 0);
-*/
 	return 0;
 }
